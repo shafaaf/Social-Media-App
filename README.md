@@ -5,4 +5,4 @@ Code:
 https://github.com/hidjou/classsed-react-firebase-functions
 https://github.com/hidjou/classsed-react-firebase-client
 
-## TODO: Start of #3 Express & formatting response
+## TODO: Start of #4 User Registration
