@@ -7,4 +7,4 @@ https://github.com/hidjou/classsed-react-firebase-functions
 
 https://github.com/hidjou/classsed-react-firebase-client
 
-## TODO: Start of #6 Authentication Middleware
+## TODO: Start of #7 Refactoring & Organising
