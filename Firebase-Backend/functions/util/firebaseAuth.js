@@ -27,6 +27,10 @@ const FirebaseAuth = (req, res, next) => {
                 return res.status(403).json({
                     general: "Token has expired"
                 });
+            } else if (err.code === "auth/argument-error") {
+                return res.status(403).json({
+                    general: "Not a valid auth token"
+                });
             }
             return res.status(403).json(err);
         });

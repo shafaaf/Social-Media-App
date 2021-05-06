@@ -1,7 +1,4 @@
 const {admin} = require("../util/admin");
-const {isEmail} = require("../util/validators");
-const {isEmpty} = require("../util/validators");
-
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTH_DOMAIN,
@@ -14,6 +11,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebase = require("firebase");
+const {validateLoginData} = require("../util/validators");
+const {validateSignupData} = require("../util/validators");
 firebase.initializeApp(firebaseConfig);
 
 
@@ -25,31 +24,8 @@ exports.signup = (req, res) => {
         handle: req.body.handle
     };
 
-    // TODO: Add validation that all keys are passed in
-
-    const errors = {};
-
-    // Validate email
-    if (isEmpty(newUser.email)) {
-        errors.email = "Must not be empty";
-    } else if (!isEmail(newUser.email)) {
-        errors.email = "Must be a valid email address";
-    }
-
-    // Validate passwords
-    if (isEmpty(newUser.password)) {
-        errors.password = "Must not be empty";
-    }
-    if (newUser.password !== newUser.confirmPassword) {
-        errors.password = "Passwords must match";
-    }
-    if (isEmpty(newUser.handle)) {
-        errors.handle = "Must not be empty";
-    }
-
-    if (Object.keys(errors).length > 0) {
-        return res.status(400).json(errors);
-    }
+    const {valid, errors} = validateSignupData(newUser);
+    if (!valid) return res.status(400).json(errors);
 
     let tokenGlobal;
     let userUIdGlobal;
@@ -104,19 +80,8 @@ exports.login = (req, res) => {
         password: req.body.password
     };
 
-    const errors = {};
-
-
-    if (isEmpty(user.email)) {
-        errors.email = "Must not be empty";
-    } else if (!isEmail(user.email)) {
-        errors.email = "Must be a valid email address";
-    }
-
-    if (isEmpty(user.password)) errors.password = "Must not be empty";
-
-    if (Object.keys(errors).length > 0) return res.status(400).json(errors);
-
+    const {valid, errors} = validateLoginData(user);
+    if (!valid) return res.status(400).json(errors);
 
     // login the user
     firebase.auth().signInWithEmailAndPassword(user.email, user.password)
