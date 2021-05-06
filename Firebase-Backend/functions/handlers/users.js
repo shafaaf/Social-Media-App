@@ -2,6 +2,8 @@ const {admin} = require("../util/admin");
 const {isEmail} = require("../util/validators");
 const {isEmpty} = require("../util/validators");
 
+require("dotenv").config({path: __dirname + "/.env"});
+
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTH_DOMAIN,
