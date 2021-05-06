@@ -1,7 +1,4 @@
 const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-
-admin.initializeApp();
 
 require("dotenv").config({path: __dirname + "/.env"});
 
@@ -15,25 +12,19 @@ const firebaseConfig = {
     measurementId: process.env.MEASUREMENT_ID
 };
 
-// Initialize Firebase
-const firebase = require("firebase");
-firebase.initializeApp(firebaseConfig);
 
+const {FirebaseAuth} = require("./util/firebaseAuth");
+const {isEmail} = require("./util/validators");
+const {isEmpty} = require("./util/validators");
 const express = require("express");
+
 const app = express();
 
+// Initialize Firebase
+const firebase = require("firebase");
+const {admin} = require("./util/admin");
+firebase.initializeApp(firebaseConfig);
 
-const isEmpty = (string) => {
-    if (string.trim() === "") return true;
-    else return false;
-};
-
-const isEmail = (email) => {
-    // eslint-disable-next-line max-len
-    const regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (email.match(regEx)) return true;
-    else return false;
-};
 
 // test route for hello world
 exports.helloWorld = functions.https.onRequest((request, response) => {
@@ -167,37 +158,6 @@ app.post("/login", (req, res) => {
         });
 });
 
-const FirebaseAuth = (req, res, next) => {
-    let idToken;
-    if (req.headers.authorization &&
-            req.headers.authorization.startsWith("Bearer ")) {
-        idToken = req.headers.authorization.split("Bearer ")[1];
-    } else {
-        console.error("No token found");
-        res.status(403).json({error: "Unauthorized request"});
-    }
-    // verify token
-    admin.auth().verifyIdToken(idToken)
-        .then((decodedIdToken) => {
-            req.user = decodedIdToken; // put in decoded token req object
-            console.log("decodedIdToken is: ", decodedIdToken);
-            return admin.firestore().collection("users")
-                .where("userUId", "==", req.user.uid).limit(1).get();
-        })
-        .then((data) => {
-            req.user.handle = data.docs[0].data().handle;
-            return next();
-        })
-        .catch((err) => {
-            console.error("Error while verifying token ", err);
-            if (err.code === "auth/id-token-expired") {
-                return res.status(403).json({
-                    general: "Token has expired"
-                });
-            }
-            return res.status(403).json(err);
-        });
-};
 
 // get all posts
 app.get("/posts", (req, res) => {
@@ -221,6 +181,8 @@ app.get("/posts", (req, res) => {
         .catch((e) => console.error(e));
 });
 
+// eslint-disable-next-line max-len
+// TODO: Even after deleting email account on firebase console, can still post posts with token.
 app.post("/posts", FirebaseAuth, (req, res) => {
     const newPost = {
         body: req.body.body,
