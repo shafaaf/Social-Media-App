@@ -2,8 +2,6 @@ const {admin} = require("../util/admin");
 const {isEmail} = require("../util/validators");
 const {isEmpty} = require("../util/validators");
 
-require("dotenv").config({path: __dirname + "/.env"});
-
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTH_DOMAIN,
@@ -84,19 +82,19 @@ exports.signup = (req, res) => {
                     })
                     .then(() => {
                         return res.status(201).json({token: tokenGlobal});
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                        if (error.code === "auth/email-already-in-use") {
-                            return res.status(400).json({
-                                email: "email is already in use"
-                            });
-                        }
-                        return res.status(500).json({
-                            error: error.code
-                        });
                     });
             }
+        })
+        .catch((error) => {
+            console.error(error);
+            if (error.code === "auth/email-already-in-use") {
+                return res.status(400).json({
+                    email: "email is already in use"
+                });
+            }
+            return res.status(500).json({
+                error: error.code
+            });
         });
 };
 

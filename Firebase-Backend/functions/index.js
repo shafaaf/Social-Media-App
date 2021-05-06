@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
 const express = require("express");
 
-// require("dotenv").config({path: __dirname + "/.env"});
+require("dotenv").config({path: __dirname + "/.env"});
 
 const {FirebaseAuth} = require("./util/firebaseAuth");
 const {login} = require("./handlers/users");
