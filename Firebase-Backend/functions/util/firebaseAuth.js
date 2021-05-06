@@ -32,6 +32,8 @@ const FirebaseAuth = (req, res, next) => {
                     general: "Not a valid auth token"
                 });
             }
+            console.log("HERE: err is: ", err);
+            console.log("HERE2: err is: ", JSON.parse(err));
             return res.status(403).json(err);
         });
 };
