@@ -1,7 +1,6 @@
 const functions = require("firebase-functions");
 const express = require("express");
-
-require("dotenv").config({path: __dirname + "/.env"});
+const {getUserDetails} = require("./handlers/users");
 
 const {FirebaseAuth} = require("./util/firebaseAuth");
 const {login, signup, uploadImage, addUserDetails} =
@@ -18,11 +17,14 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
     response.send("Hello world from Firebase!");
 });
 
-// user routes
+// auth routes
 app.post("/signup", signup);
 app.post("/login", login);
+
+// user routes
 app.post("/user/image", FirebaseAuth, uploadImage);
 app.post("/user", FirebaseAuth, addUserDetails);
+app.get("/user", FirebaseAuth, getUserDetails);
 
 // post routes
 app.get("/posts", getPosts);
