@@ -11,6 +11,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebase = require("firebase");
+const {extractUserDetails} = require("../util/validators");
 const {validateLoginData} = require("../util/validators");
 const {validateSignupData} = require("../util/validators");
 firebase.initializeApp(firebaseConfig);
@@ -163,4 +164,16 @@ exports.uploadImage = (req, res) => {
             });
     });
     busboy.end(req.rawBody);
+};
+
+exports.addUserDetails = (req, res) => {
+    const userDetails = extractUserDetails(req.body);
+    admin.firestore().doc(`/users/${req.user.handle}`).update(userDetails)
+        .then(() => {
+            return res.json({message: "Details added successfully"});
+        })
+        .catch((err) => {
+            console.error(err);
+            return res.status(500).json({error: err.code});
+        });
 };

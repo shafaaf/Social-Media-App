@@ -1,5 +1,17 @@
 // just as a reference
 let db = {
+    users: [
+        {
+            userId: 'dh23ggj5h32g543j5gf43',
+            email: 'user@email.com',
+            handle: 'user',
+            createdAt: '2019-03-15T10:59:52.798Z',
+            profilePicUrl: 'some_url',
+            bio: 'Hello, my name is user, nice to meet you',
+            website: 'https://user.com',
+            location: 'Lonodn, UK'
+        }
+    ],
     posts: [
         {
             userHandle: 'user',
@@ -7,6 +19,30 @@ let db = {
             createdAt: '2019-03-15T10:59:52.798Z',
             likeCount: 5,
             commentCount: 3
+        }
+    ]
+};
+
+const userDetails = {
+    // Redux data
+    credentials: {
+        userId: 'N43KJ5H43KJHREW4J5H3JWMERHB',
+        email: 'user@email.com',
+        handle: 'user',
+        createdAt: '2019-03-15T10:59:52.798Z',
+        imageUrl: 'image/dsfsdkfghskdfgs/dgfdhfgdh',
+        bio: 'Hello, my name is user, nice to meet you',
+        website: 'https://user.com',
+        location: 'Lonodn, UK'
+    },
+    likes: [
+        {
+            userHandle: 'user',
+            postId: 'hh7O5oWfWucVzGbHH2pa'
+        },
+        {
+            userHandle: 'user',
+            postId: '3IOnFoQexRcofs5OhBXO'
         }
     ]
 };
