@@ -20,7 +20,6 @@ const {validateSignupData} = require("../util/validators");
 firebase.initializeApp(firebaseConfig);
 console.log("firebaseConfig is: ", firebaseConfig);
 
-
 exports.signup = (req, res) => {
     const newUser = {
         email: req.body.email,

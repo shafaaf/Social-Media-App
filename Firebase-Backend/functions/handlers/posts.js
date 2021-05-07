@@ -1,6 +1,6 @@
 const {admin} = require("../util/admin");
 
-exports.getPosts = (req, res) => {
+exports.getAllPosts = (req, res) => {
     admin.firestore()
         .collection("posts")
         .orderBy("createdAt", "desc")
@@ -19,6 +19,38 @@ exports.getPosts = (req, res) => {
             return res.json(posts);
         })
         .catch((e) => console.error(e));
+};
+
+exports.getPost = (req, res) => {
+    let postData = {};
+    console.log("Im here1");
+    admin.firestore().doc(`/posts/${req.params.postId}`)
+        .get()
+        .then((doc) => {
+            console.log("Im here2");
+            if (!doc.exists) {
+                return res.status(404).json({error: "Post not found"});
+            }
+            postData = doc.data();
+            postData.postId = doc.id;
+            return admin.firestore()
+                .collection("comments")
+                .orderBy("createdAt", "desc")
+                .where("postId", "==", req.params.postId)
+                .get();
+        })
+        .then((data) => {
+            postData.comments = [];
+            data.forEach((doc) => {
+                postData.comments.push(doc.data());
+            });
+            return res.json(postData);
+        })
+        .catch((err) => {
+            console.log("Im here3");
+            console.error(err);
+            res.status(500).json({error: err.code});
+        });
 };
 
 exports.createPost = (req, res) => {
