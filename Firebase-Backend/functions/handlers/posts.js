@@ -1,4 +1,4 @@
-const {isEmpty} = require("../util/utils");
+const {isEmpty, sanitizeString} = require("../util/utils");
 
 const {admin} = require("../util/admin");
 
@@ -53,17 +53,24 @@ exports.getPost = (req, res) => {
 };
 
 exports.createPost = (req, res) => {
+    if (isEmpty(req.body.body)) {
+        return res.status(400).json({post: "Must not be empty"});
+    }
+    req.body.body = sanitizeString(req.body.body);
+
     const newPost = {
         body: req.body.body,
         userHandle: req.user.handle,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        likeCount: 0,
+        commentCount: 0
     };
 
     admin.firestore().collection("posts").add(newPost)
         .then((doc) => {
-            res.json({
-                message: `document: ${doc.id} created successfully!`
-            });
+            const resPost = newPost;
+            resPost.postId = doc.id;
+            res.json(resPost);
         })
         .catch((e) => {
             console.log(e);
@@ -78,13 +85,13 @@ exports.commentOnPost = (req, res) => {
     if (isEmpty(req.body.body)) {
         return res.status(400).json({comment: "Must not be empty"});
     }
+    req.body.body = sanitizeString(req.body.body);
 
     const newComment = {
         body: req.body.body,
         createdAt: new Date().toISOString(),
         postId: req.params.postId,
-        userHandle: req.user.handle,
-        profilePicUrl: req.user.profilePicUrl
+        userHandle: req.user.handle
     };
     console.log(newComment);
 
@@ -106,4 +113,12 @@ exports.commentOnPost = (req, res) => {
             console.log(err);
             res.status(500).json({error: "Something went wrong"});
         });
+};
+
+exports.likePost = (req, res) => {
+
+};
+
+exports.unlikePost = (req, res) => {
+
 };
