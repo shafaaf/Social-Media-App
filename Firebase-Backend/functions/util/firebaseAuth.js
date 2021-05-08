@@ -7,7 +7,9 @@ const FirebaseAuth = (req, res, next) => {
         idToken = req.headers.authorization.split("Bearer ")[1];
     } else {
         console.error("No token found");
-        res.status(403).json({error: "Unauthorized request"});
+        res.status(403).json({
+            error: "Auth token not found or formatted properly"
+        });
     }
     // verify token
     admin.auth().verifyIdToken(idToken)

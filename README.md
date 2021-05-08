@@ -7,7 +7,7 @@ https://github.com/hidjou/classsed-react-firebase-functions
 
 https://github.com/hidjou/classsed-react-firebase-client
 
-## TODO: Start of #11 Like, Unlike and Delete Scream
+## TODO: Start of #12 Create and Get Notifications
 
 TODOs:
 Remove user handle concept and use uuid

@@ -116,9 +116,117 @@ exports.commentOnPost = (req, res) => {
 };
 
 exports.likePost = (req, res) => {
+    const postDocument = admin.firestore().doc(`/posts/${req.params.postId}`);
+    let postData;
 
+    postDocument.get()
+        .then((doc) => {
+            if (doc.exists) {
+                postData = doc.data();
+                postData.postId = doc.id;
+
+                const likeDocument = admin.firestore()
+                    .collection("likes")
+                    .where("userHandle", "==", req.user.handle)
+                    .where("postId", "==", req.params.postId)
+                    .limit(1);
+                return likeDocument.get();
+            } else {
+                return res.status(404).json({error: "Post not found"});
+            }
+        })
+        .then((data) => {
+            if (data.empty) { // no like document by user for this post
+                return admin.firestore()
+                    .collection("likes")
+                    .add({
+                        postId: req.params.postId,
+                        userHandle: req.user.handle
+                    })
+                    .then(() => {
+                        postData.likeCount++;
+                        return postDocument.update({
+                            likeCount: postData.likeCount
+                        });
+                    })
+                    .then(() => {
+                        return res.json(postData);
+                    });
+            } else { // like document by user for this post exists already
+                return res.status(400).json({error: "Post already liked"});
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).json({error: err.code});
+        });
 };
 
 exports.unlikePost = (req, res) => {
+    const postDocument = admin.firestore().doc(`/posts/${req.params.postId}`);
+    let postData;
 
+    postDocument.get()
+        .then((doc) => {
+            if (doc.exists) {
+                postData = doc.data();
+                postData.postId = doc.id;
+                const likeDocument = admin.firestore()
+                    .collection("likes")
+                    .where("userHandle", "==", req.user.handle)
+                    .where("postId", "==", req.params.postId)
+                    .limit(1);
+                return likeDocument.get();
+            } else {
+                return res.status(404).json({error: "Post not found"});
+            }
+        })
+        .then((data) => {
+            if (data.empty) { // no like document by user for this post
+                return res.status(400).json({error: "Post not liked"});
+            } else { // like document by user for this post exists
+                return admin.firestore()
+                    .doc(`/likes/${data.docs[0].id}`)
+                    .delete()
+                    .then(() => {
+                        postData.likeCount--;
+                        return postDocument.update({
+                            likeCount: postData.likeCount
+                        });
+                    })
+                    .then(() => {
+                        res.json(postData);
+                    });
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).json({error: err.code});
+        });
+};
+
+// TODO: Delete comments, likes associated with the post
+exports.deletePost = (req, res) => {
+    const document = admin.firestore().doc(`/posts/${req.params.postId}`);
+    document
+        .get()
+        .then((doc) => {
+            if (!doc.exists) {
+                return res.status(404).json({error: "Post not found"});
+            }
+            if (doc.data().userHandle !== req.user.handle) {
+                return res.status(403).json({
+                    error: "You dont own this post to delete it"
+                });
+            } else {
+                return document.delete();
+            }
+        })
+        .then(() => {
+            res.json({message: "Post deleted successfully"});
+        })
+        .catch((err) => {
+            console.error(err);
+            return res.status(500).json({error: err.code});
+        });
 };
