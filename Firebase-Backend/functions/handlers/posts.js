@@ -1,3 +1,5 @@
+const {isEmpty} = require("../util/utils");
+
 const {admin} = require("../util/admin");
 
 exports.getAllPosts = (req, res) => {
@@ -23,11 +25,9 @@ exports.getAllPosts = (req, res) => {
 
 exports.getPost = (req, res) => {
     let postData = {};
-    console.log("Im here1");
     admin.firestore().doc(`/posts/${req.params.postId}`)
         .get()
         .then((doc) => {
-            console.log("Im here2");
             if (!doc.exists) {
                 return res.status(404).json({error: "Post not found"});
             }
@@ -47,7 +47,6 @@ exports.getPost = (req, res) => {
             return res.json(postData);
         })
         .catch((err) => {
-            console.log("Im here3");
             console.error(err);
             res.status(500).json({error: err.code});
         });
@@ -72,5 +71,39 @@ exports.createPost = (req, res) => {
                 .json({
                     error: "something went wrong"
                 });
+        });
+};
+
+exports.commentOnPost = (req, res) => {
+    if (isEmpty(req.body.body)) {
+        return res.status(400).json({comment: "Must not be empty"});
+    }
+
+    const newComment = {
+        body: req.body.body,
+        createdAt: new Date().toISOString(),
+        postId: req.params.postId,
+        userHandle: req.user.handle,
+        profilePicUrl: req.user.profilePicUrl
+    };
+    console.log(newComment);
+
+    admin.firestore().doc(`/posts/${req.params.postId}`)
+        .get()
+        .then((doc) => {
+            if (!doc.exists) {
+                return res.status(404).json({error: "Post not found"});
+            }
+            return doc.ref.update({commentCount: doc.data().commentCount + 1});
+        })
+        .then(() => {
+            return admin.firestore().collection("comments").add(newComment);
+        })
+        .then(() => {
+            res.json(newComment);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json({error: "Something went wrong"});
         });
 };

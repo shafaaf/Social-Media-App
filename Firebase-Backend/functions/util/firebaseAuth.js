@@ -19,6 +19,7 @@ const FirebaseAuth = (req, res, next) => {
         })
         .then((data) => {
             req.user.handle = data.docs[0].data().handle;
+            req.user.profilePicUrl = data.docs[0].data().profilePicUrl;
             return next();
         })
         .catch((err) => {

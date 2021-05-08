@@ -7,4 +7,4 @@ https://github.com/hidjou/classsed-react-firebase-functions
 
 https://github.com/hidjou/classsed-react-firebase-client
 
-## TODO: Start of #7 Refactoring & Organising
+## TODO: Start of #11 Like, Unlike and Delete Scream

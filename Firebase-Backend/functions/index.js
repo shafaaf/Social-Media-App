@@ -4,7 +4,8 @@ const express = require("express");
 const {FirebaseAuth} = require("./util/firebaseAuth");
 const {login, signup, uploadImage, addUserDetails, getUserDetails} =
     require("./handlers/users");
-const {createPost, getAllPosts, getPost} = require("./handlers/posts");
+const {createPost, getAllPosts, getPost, commentOnPost} =
+    require("./handlers/posts");
 
 const app = express();
 
@@ -20,12 +21,15 @@ app.post("/login", login);
 
 // user routes
 app.post("/user/image", FirebaseAuth, uploadImage);
-app.post("/user", FirebaseAuth, addUserDetails);
 app.get("/user", FirebaseAuth, getUserDetails);
+app.post("/user", FirebaseAuth, addUserDetails);
+
 
 // post routes
 app.get("/posts", getAllPosts); // get all posts
 app.get("/posts/:postId", getPost); // get specific post
+// eslint-disable-next-line max-len
+app.post("/posts/:postId/comment", FirebaseAuth, commentOnPost); // comment on a post
 // TODO: Even after deleting email account on firebase console,
 //  can still post posts with token.
 app.post("/posts", FirebaseAuth, createPost);
@@ -34,6 +38,5 @@ app.post("/posts", FirebaseAuth, createPost);
 // delete a post
 // like a post
 // unlike a post
-// comment on a post
 
 exports.api = functions.https.onRequest(app);

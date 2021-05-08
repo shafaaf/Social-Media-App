@@ -30,7 +30,7 @@ const userDetails = {
         email: 'user@email.com',
         handle: 'user',
         createdAt: '2019-03-15T10:59:52.798Z',
-        imageUrl: 'image/dsfsdkfghskdfgs/dgfdhfgdh',
+        profilePicUrl: 'image/dsfsdkfghskdfgs/dgfdhfgdh',
         bio: 'Hello, my name is user, nice to meet you',
         website: 'https://user.com',
         location: 'Lonodn, UK'
