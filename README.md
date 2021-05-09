@@ -7,7 +7,7 @@ https://github.com/hidjou/classsed-react-firebase-functions
 
 https://github.com/hidjou/classsed-react-firebase-client
 
-## TODO: Start of #12 Create and Get Notifications
+## TODO: Start of #13 Finishing up Cloud Functions
 
 TODOs:
 Remove user handle concept and use uuid
