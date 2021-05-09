@@ -205,48 +205,24 @@ exports.unlikePost = (req, res) => {
         });
 };
 
-// TODO: Delete comments, likes associated with the post
 exports.deletePost = (req, res) => {
     const document = admin.firestore().doc(`/posts/${req.params.postId}`);
-    document.get()
+    document
+        .get()
         .then((doc) => {
             if (!doc.exists) {
                 return res.status(404).json({error: "Post not found"});
             }
             if (doc.data().userHandle !== req.user.handle) {
                 return res.status(403).json({
-                    error: "You dont own this post to delete it"
+                    error: "Unauthorized. Dont own the post"
                 });
             } else {
                 return document.delete();
             }
         })
-        .then(() => { // get all likes for the post
-            const likeDocument = admin.firestore()
-                .collection("likes")
-                .where("postId", "==", req.params.postId);
-            return likeDocument.get();
-        })
-        .then((data) => { // delete all like
-            data.forEach((doc) => {
-                doc.ref.delete();
-            });
-        })
-        .then(() => { // get all comments for the post
-            const commentDocument = admin.firestore()
-                .collection("comments")
-                .where("postId", "==", req.params.postId);
-            return commentDocument.get();
-        })
-        .then((data) => { // delete all comments
-            data.forEach((doc) => {
-                doc.ref.delete();
-            });
-        })
         .then(() => {
-            res.json({
-                message: "Post and related comments, likes deleted successfully"
-            });
+            res.json({message: "Post deleted successfully"});
         })
         .catch((err) => {
             console.error(err);
