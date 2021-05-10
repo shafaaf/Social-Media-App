@@ -41,6 +41,8 @@ let db = {
     ]
 };
 
+
+// TODO: fix this later
 const userDetails = {
     // Redux data
     credentials: {

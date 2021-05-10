@@ -13,3 +13,4 @@ TODOs:
 Remove user handle concept and use uuid
 When add/delete comments from firebase console, comment count on posts collection does not update
 Sanitize all req.body inputs before writing to firestore
+Compare with their codebase and fix changes
