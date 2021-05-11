@@ -8,8 +8,8 @@ class Home extends Component {
         this.state = {
             posts: null
         }
-
     }
+
     componentDidMount() {
         axios.get(`http://localhost:5000/social-media-app-22252/us-central1/api/posts`)
         .then(res => {
@@ -21,11 +21,21 @@ class Home extends Component {
         .catch(err => console.log(err));
     }
 
+    showRecentPosts = () => {
+        if (this.state.posts) {
+            return this.state.posts.map((post, i) => {
+                return <p key={post.postId}>{post.body}</p>;
+            })
+        } else {
+            return <p>Loading</p>;
+        }
+    }
+
     render() {
         return (
             <Grid container spacing={10}>
                 <Grid item sm={8} xs={12}>
-                    <p>Content</p>
+                    {this.showRecentPosts()}
                 </Grid>
                 <Grid item sm={4} xs={12}>
                     <p>Profile</p>
