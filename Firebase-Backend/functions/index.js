@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const express = require("express");
 const {admin} = require("./util/admin");
+const cors = require("cors");
 
 const {FirebaseAuth} = require("./util/firebaseAuth");
 
@@ -12,6 +13,7 @@ const {createPost, getAllPosts, getPost, deletePost, commentOnPost,
     unlikePost, likePost} = require("./handlers/posts");
 
 const app = express();
+app.use(cors());
 
 // test route for hello world
 exports.helloWorld = functions.https.onRequest((request, response) => {
