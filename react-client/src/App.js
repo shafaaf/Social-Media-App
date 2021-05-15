@@ -6,7 +6,7 @@ import login from "./pages/login";
 import signup from "./pages/signup";
 import Navbar from "./components/Navbar";
 
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
     palette: {

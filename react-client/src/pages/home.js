@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
+import Post from "../components/Post";
 
 class Home extends Component {
     constructor(props) {
@@ -23,8 +24,8 @@ class Home extends Component {
 
     showRecentPosts = () => {
         if (this.state.posts) {
-            return this.state.posts.map((post, i) => {
-                return <p key={post.postId}>{post.body}</p>;
+            return this.state.posts.map((post) => {
+                return <Post key={post.postId} post={post}/>;
             })
         } else {
             return <p>Loading</p>;
