@@ -61,26 +61,26 @@ class Login extends Component {
         axios.post(`http://localhost:5000/social-media-app-22252/us-central1/api/login`, userData)
             .then(res => {
                 console.log(res.data);
-
                 this.setState({
                     loading: false,
                     errors: {}
                 });
+                this.props.history.push("/");
             })
             .catch(err => {
-                if (!err.response) {
+                if (err.response) {
+                    console.error(err.response.data);
+                    this.setState({
+                        loading: false,
+                        errors: err.response.data
+                    });
+                } else {
                     console.error(err);
                     this.setState({
                         loading: false,
                         errors: {
                             "general" : "Cannot connect due to network issue."
                         }
-                    });
-                } else {
-                    console.error(err.response.data);
-                    this.setState({
-                        loading: false,
-                        errors: err.response.data
                     });
                 }
             });
