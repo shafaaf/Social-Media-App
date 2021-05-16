@@ -100,7 +100,11 @@ exports.login = (req, res) => {
         })
         .catch((err) => {
             console.log(err);
-            if (err.code === "auth/wrong-password") {
+            if (err.code === "auth/invalid-email") {
+                return res.status(403).json({
+                    email: "The email address is badly formatted."
+                });
+            } else if (err.code === "auth/wrong-password") {
                 return res.status(403).json({
                     general: "Wrong credentials, please try again."
                 });
