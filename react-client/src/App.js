@@ -6,8 +6,11 @@ import login from "./pages/login";
 import signup from "./pages/signup";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./utils/ProtectedRoute";
-
 import jwtDecode from "jwt-decode";
+
+import {Provider} from "react-redux";
+import store from "./redux/store";
+
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
@@ -66,8 +69,8 @@ class App extends Component {
         const {authenticated} = this.state;
         console.log("authenticated is: ", authenticated);
         return (
-            <ThemeProvider theme={theme}>
-                <div className="App">
+            <Provider store={store}>
+                <ThemeProvider theme={theme}>
                     <Router>
                         <Navbar/>
                         <div className="container">
@@ -88,8 +91,8 @@ class App extends Component {
                             </Switch>
                         </div>
                     </Router>
-                </div>
-            </ThemeProvider>
+                </ThemeProvider>
+            </Provider>
         );
     }
 }
