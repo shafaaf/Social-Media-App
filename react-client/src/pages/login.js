@@ -61,10 +61,12 @@ class Login extends Component {
         axios.post(`http://localhost:5000/social-media-app-22252/us-central1/api/login`, userData)
             .then(res => {
                 console.log(res.data);
+                localStorage.setItem('FireBaseAuthToken', `Bearer ${res.data.token}`);
                 this.setState({
                     loading: false,
                     errors: {}
                 });
+                this.props.changeAuthStatus(true);
                 this.props.history.push("/");
             })
             .catch(err => {
@@ -105,10 +107,10 @@ class Login extends Component {
                         <Typography variant="h2" className={classes.pageTitle}>Login</Typography>
 
                         <form noValidate onSubmit={this.handleSubmit}>
-                            <TextField id="email" name="email" type="email" label="email" className={classes.textField}
+                            <TextField id="email" name="email" type="email" label="Email" className={classes.textField}
                                 value={this.state.email} onChange={this.handleChange}
                                 helperText={errors.email} error={errors.email ? true : false} fullWidth/>
-                            <TextField id="password" name="password" type="password" label="password" className={classes.textField}
+                            <TextField id="password" name="password" type="password" label="Password" className={classes.textField}
                                 value={this.state.password} onChange={this.handleChange}
                                helperText={errors.password} error={errors.password ? true : false} fullWidth/>
 

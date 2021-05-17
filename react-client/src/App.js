@@ -5,6 +5,9 @@ import home from "./pages/home";
 import login from "./pages/login";
 import signup from "./pages/signup";
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./utils/ProtectedRoute";
+
+import jwtDecode from "jwt-decode";
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
@@ -27,7 +30,41 @@ const theme = createMuiTheme({
 
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            authenticated : false
+        }
+
+    }
+    componentDidMount() {
+        const token = localStorage.getItem('FireBaseAuthToken');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.exp * 1000 < Date.now()) { // expired
+                this.setState({
+                    authenticated : false
+                }, () => {
+                    // window.location.href = '/login';
+                });
+            } else {
+                this.setState({
+                    authenticated : true
+                });
+            }
+        }
+    }
+
+    changeAuthStatus = status => {
+        this.setState({
+            authenticated: status
+        });
+    };
+
     render() {
+        // How do protected routes: https://stackoverflow.com/questions/48497510/simple-conditional-routing-in-reactjs
+        const {authenticated} = this.state;
+        console.log("authenticated is: ", authenticated);
         return (
             <ThemeProvider theme={theme}>
                 <div className="App">
@@ -36,8 +73,18 @@ class App extends Component {
                         <div className="container">
                             <Switch>
                                 <Route exact path = '/' component={home}/>
-                                <Route exact path = '/login' component={login}/>
-                                <Route exact path = '/signup' component={signup}/>
+                                <ProtectedRoute
+                                    exact path='/login'
+                                    component={login}
+                                    authenticated={authenticated}
+                                    changeAuthStatus={this.changeAuthStatus}
+                                />
+                                <ProtectedRoute
+                                    exact path='/signup'
+                                    component={signup}
+                                    authenticated={authenticated}
+                                    changeAuthStatus={this.changeAuthStatus}
+                                />
                             </Switch>
                         </div>
                     </Router>
