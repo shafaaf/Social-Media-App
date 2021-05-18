@@ -14,12 +14,11 @@ class Home extends Component {
     componentDidMount() {
         axios.get(`http://localhost:5000/social-media-app-22252/us-central1/api/posts`)
         .then(res => {
-            console.log(res);
             this.setState({
                 posts: res.data
             });
         })
-        .catch(err => console.log(err));
+        .catch(err => console.error(err));
     }
 
     showRecentPosts = () => {

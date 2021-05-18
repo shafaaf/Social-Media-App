@@ -7,8 +7,9 @@ import PropTypes from 'prop-types';
 import TwitterIcon from'../images/twitter.jpeg';
 import {CircularProgress, TextField} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
-import axios from "axios";
 import {Link} from "react-router-dom";
+import {connect} from "react-redux";
+import {signupUser} from "../redux/actions/userActions";
 
 const styles = {
     form: {
@@ -17,11 +18,6 @@ const styles = {
     image: {
         width: '70%',
         margin: '-10% auto 10% auto'
-        // padding: "0",
-        // display: "block",
-        // margin: "0 auto",
-        // maxHeight: "100%",
-        // maxWidth: "100%"
     },
     pageTitle: {
         // margin: '-10% auto 10% auto'
@@ -45,51 +41,19 @@ class Signup extends Component {
             email: '',
             password: '',
             confirmPassword: '',
-            handle: '',
-            loading: false,
-            errors: {}
+            handle: ''
         };
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.setState({
-            loading: true
-        });
         const newUserData = {
             email: this.state.email,
             password: this.state.password,
             confirmPassword: this.state.confirmPassword,
             handle: this.state.handle
         };
-        axios.post(`http://localhost:5000/social-media-app-22252/us-central1/api/signup`, newUserData)
-            .then(res => {
-                console.log(res.data);
-                localStorage.setItem('FireBaseAuthToken', `Bearer ${res.data.token}`);
-                this.setState({
-                    loading: false,
-                    errors: {}
-                });
-                this.props.changeAuthStatus(true);
-                this.props.history.push("/");
-            })
-            .catch(err => {
-                if (err.response) {
-                    console.error(err.response.data);
-                    this.setState({
-                        loading: false,
-                        errors: err.response.data
-                    });
-                } else {
-                    console.error(err);
-                    this.setState({
-                        loading: false,
-                        errors: {
-                            "general" : "Cannot connect due to network issue."
-                        }
-                    });
-                }
-            });
+        this.props.signupUser(newUserData, this.props.history, this.props.changeAuthStatus);
     }
 
     handleChange = (e) => {
@@ -100,7 +64,7 @@ class Signup extends Component {
 
     render() {
         const {classes} = this.props;
-        const {loading, errors} = this.state;
+        const {errors, loading} = this.props.ui;
 
         return (
             <div>
@@ -153,8 +117,22 @@ class Signup extends Component {
     }
 }
 
-Signup.propTypes = {
-    classes: PropTypes.object.isRequired
+const MapStateToProps = (state) => {
+    return {
+        user: state.user,
+        ui: state.ui
+    };
 };
 
-export default withStyles(styles)(Signup);
+const MapActionsToProps = {
+    signupUser
+};
+
+Signup.propTypes = {
+    classes: PropTypes.object.isRequired,
+    signupUser : PropTypes.func.isRequired,
+    user : PropTypes.object.isRequired,
+    ui : PropTypes.object.isRequired
+};
+
+export default connect(MapStateToProps, MapActionsToProps)(withStyles(styles)(Signup));

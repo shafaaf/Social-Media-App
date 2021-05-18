@@ -31,7 +31,6 @@ const theme = createMuiTheme({
     }
 });
 
-
 class App extends Component {
     constructor(props) {
         super(props);
@@ -39,6 +38,7 @@ class App extends Component {
             authenticated : false
         }
     }
+
     componentDidMount() {
         const token = localStorage.getItem('FireBaseAuthToken');
         if (token) {
@@ -57,7 +57,6 @@ class App extends Component {
         }
     }
 
-    // TODO: Remove this after finishing signup
     changeAuthStatus = status => {
         this.setState({
             authenticated: status
@@ -65,9 +64,9 @@ class App extends Component {
     };
 
     render() {
+        console.log("authenticated is: ", this.state.authenticated);
         // How do protected routes: https://stackoverflow.com/questions/48497510/simple-conditional-routing-in-reactjs
         const {authenticated} = this.state;
-        console.log("authenticated is: ", authenticated);
         return (
             <Provider store={store}>
                 <ThemeProvider theme={theme}>

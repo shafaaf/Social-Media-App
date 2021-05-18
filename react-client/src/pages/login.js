@@ -12,7 +12,6 @@ import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {loginUser} from '../redux/actions/userActions';
 
-
 const styles = {
     form: {
         textAlign: 'center'
@@ -51,7 +50,7 @@ class Login extends Component {
             email: this.state.email,
             password: this.state.password
         };
-        this.props.loginUser(userData, this.props.history);
+        this.props.loginUser(userData, this.props.history, this.props.changeAuthStatus);
     }
 
     handleChange = (e) => {
@@ -60,17 +59,9 @@ class Login extends Component {
         })
     }
 
-
-    componentWillReceiveProps = nextProps => {
-        // if (nextProps.ui.errors) {
-        //     this.setState({ errors: nextProps.ui.errors });
-        // }
-    };
-
     render() {
         const {classes} = this.props;
-        const {errors} = this.props.ui;
-        const {loading} = this.props.ui;
+        const {errors, loading} = this.props.ui;
 
         return (
             <div>
