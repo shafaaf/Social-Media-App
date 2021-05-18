@@ -1,4 +1,4 @@
-import {SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI} from "../types";
+import {SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_AUTHENTICATED} from "../types";
 import axios from "axios";
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -33,13 +33,15 @@ export const loginUser = (userData, history) => (dispatch) => {
 export const getUserData = () => (dispatch) => {
     axios.get(`http://localhost:5000/social-media-app-22252/us-central1/api/user`)
         .then(res => {
+            console.log("getUserData res is: ", res);
             dispatch({
-               type: SET_USER,
+               type: SET_AUTHENTICATED,
                payload: res.data
             });
         })
         .catch((err) => {
             console.log(err);
+            // TODO: Handle error here by dispatching something
         });
 }
 

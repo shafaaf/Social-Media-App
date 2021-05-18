@@ -38,7 +38,6 @@ class App extends Component {
         this.state = {
             authenticated : false
         }
-
     }
     componentDidMount() {
         const token = localStorage.getItem('FireBaseAuthToken');
@@ -58,6 +57,7 @@ class App extends Component {
         }
     }
 
+    // TODO: Remove this after finishing signup
     changeAuthStatus = status => {
         this.setState({
             authenticated: status

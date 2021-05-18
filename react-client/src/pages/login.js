@@ -20,11 +20,6 @@ const styles = {
     image: {
         width: '70%',
         margin: '-10% auto 10% auto'
-        // padding: "0",
-        // display: "block",
-        // margin: "0 auto",
-        // maxHeight: "100%",
-        // maxWidth: "100%"
     },
     pageTitle: {
         // margin: '-10% auto 10% auto'
@@ -46,12 +41,9 @@ class Login extends Component {
         super(props);
         this.state = {
             email: '',
-            password: '',
-            errors: {}
+            password: ''
         };
     }
-
-    // TODO: componentWillReceiveProps
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -70,14 +62,14 @@ class Login extends Component {
 
 
     componentWillReceiveProps = nextProps => {
-        if (nextProps.ui.errors) {
-            this.setState({ errors: nextProps.ui.errors });
-        }
+        // if (nextProps.ui.errors) {
+        //     this.setState({ errors: nextProps.ui.errors });
+        // }
     };
 
     render() {
         const {classes} = this.props;
-        const {errors} = this.state;
+        const {errors} = this.props.ui;
         const {loading} = this.props.ui;
 
         return (
