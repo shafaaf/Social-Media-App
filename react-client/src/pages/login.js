@@ -7,8 +7,11 @@ import PropTypes from 'prop-types';
 import TwitterIcon from'../images/twitter.jpeg';
 import {CircularProgress, TextField} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
-import axios from "axios";
 import {Link} from "react-router-dom";
+
+import {connect} from "react-redux";
+import {loginUser} from '../redux/actions/userActions';
+
 
 const styles = {
     form: {
@@ -44,48 +47,19 @@ class Login extends Component {
         this.state = {
             email: '',
             password: '',
-            loading: false,
             errors: {}
         };
     }
 
+    // TODO: componentWillReceiveProps
+
     handleSubmit = (e) => {
         e.preventDefault();
-        this.setState({
-            loading: true
-        });
         const userData = {
             email: this.state.email,
             password: this.state.password
         };
-        axios.post(`http://localhost:5000/social-media-app-22252/us-central1/api/login`, userData)
-            .then(res => {
-                console.log(res.data);
-                localStorage.setItem('FireBaseAuthToken', `Bearer ${res.data.token}`);
-                this.setState({
-                    loading: false,
-                    errors: {}
-                });
-                this.props.changeAuthStatus(true);
-                this.props.history.push("/");
-            })
-            .catch(err => {
-                if (err.response) {
-                    console.error(err.response.data);
-                    this.setState({
-                        loading: false,
-                        errors: err.response.data
-                    });
-                } else {
-                    console.error(err);
-                    this.setState({
-                        loading: false,
-                        errors: {
-                            "general" : "Cannot connect due to network issue."
-                        }
-                    });
-                }
-            });
+        this.props.loginUser(userData, this.props.history);
     }
 
     handleChange = (e) => {
@@ -94,9 +68,17 @@ class Login extends Component {
         })
     }
 
+
+    componentWillReceiveProps = nextProps => {
+        if (nextProps.ui.errors) {
+            this.setState({ errors: nextProps.ui.errors });
+        }
+    };
+
     render() {
         const {classes} = this.props;
-        const {loading, errors} = this.state;
+        const {errors} = this.state;
+        const {loading} = this.props.ui;
 
         return (
             <div>
@@ -142,8 +124,22 @@ class Login extends Component {
     }
 }
 
-Login.propTypes = {
-    classes: PropTypes.object.isRequired
+const MapStateToProps = (state) => {
+    return {
+        user: state.user,
+        ui: state.ui
+    };
 };
 
-export default withStyles(styles)(Login);
+const MapActionsToProps = {
+    loginUser
+};
+
+Login.propTypes = {
+    classes: PropTypes.object.isRequired,
+    loginUser : PropTypes.func.isRequired,
+    user : PropTypes.object.isRequired,
+    ui : PropTypes.object.isRequired
+};
+
+export default connect(MapStateToProps, MapActionsToProps)(withStyles(styles)(Login));
