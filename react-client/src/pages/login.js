@@ -50,7 +50,7 @@ class Login extends Component {
             email: this.state.email,
             password: this.state.password
         };
-        this.props.loginUser(userData, this.props.history, this.props.changeAuthStatus);
+        this.props.loginUser(userData, this.props.history);
     }
 
     handleChange = (e) => {

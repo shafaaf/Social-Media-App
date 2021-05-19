@@ -1,14 +1,13 @@
 import {SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_AUTHENTICATED, SET_UNAUTHENTICATED} from "../types";
 import axios from "axios";
 
-export const loginUser = (userData, history, changeAuthStatus) => (dispatch) => {
+export const loginUser = (userData, history) => (dispatch) => {
     dispatch({type: LOADING_UI});
     axios.post(`http://localhost:5000/social-media-app-22252/us-central1/api/login`, userData)
         .then(res => {
             setAuthorizationHeader(res.data.token);
             dispatch(getUserData());
             dispatch({type : CLEAR_ERRORS});
-            changeAuthStatus(true);
             history.push("/");
         })
         .catch(err => {
@@ -30,14 +29,13 @@ export const loginUser = (userData, history, changeAuthStatus) => (dispatch) => 
         });
 }
 
-export const signupUser = (newUserData, history, changeAuthStatus) => (dispatch) => {
+export const signupUser = (newUserData, history) => (dispatch) => {
     dispatch({type: LOADING_UI});
     axios.post(`http://localhost:5000/social-media-app-22252/us-central1/api/signup`, newUserData)
         .then(res => {
             setAuthorizationHeader(res.data.token);
             dispatch(getUserData());
             dispatch({type : CLEAR_ERRORS});
-            changeAuthStatus(true);
             history.push("/");
         })
         .catch(err => {

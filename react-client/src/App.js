@@ -13,7 +13,7 @@ import store from "./redux/store";
 
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import {getUserData, logoutUser} from "./redux/actions/userActions";
+import {getUserData} from "./redux/actions/userActions";
 import axios from "axios";
 
 const theme = createMuiTheme({
@@ -34,70 +34,35 @@ const theme = createMuiTheme({
 });
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            authenticated : false
-        }
-    }
 
     componentDidMount() {
         const token = localStorage.getItem('FireBaseAuthToken');
         if (token) {
             const decodedToken = jwtDecode(token);
-            if (decodedToken.exp * 1000 < Date.now()) { // expired
-                this.setState({
-                    authenticated : false
-                });
-            } else {
+            if (decodedToken.exp * 1000 > Date.now()) { // not expired
                 axios.defaults.headers.common['Authorization'] = token;
                 store.dispatch(getUserData());
-                this.setState({
-                    authenticated : true
-                });
             }
         }
     }
 
-    changeAuthStatus = status => {
-        this.setState({
-            authenticated: status
-        });
-    };
-
-    logoutOnClick = () => {
-        store.dispatch(logoutUser());
-        this.setState({
-            authenticated: false
-        });
-    };
-
     render() {
-        console.log("authenticated is: ", this.state.authenticated);
         // How do protected routes: https://stackoverflow.com/questions/48497510/simple-conditional-routing-in-reactjs
-        const {authenticated} = this.state;
         return (
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
                     <Router>
-                        <Navbar
-                            authenticated={authenticated}
-                            logoutOnClick={this.logoutOnClick}
-                        />
+                        <Navbar logoutOnClick={this.logoutOnClick}/>
                         <div className="container">
                             <Switch>
                                 <Route exact path = '/' component={home}/>
                                 <ProtectedRoute
                                     exact path='/login'
                                     component={login}
-                                    authenticated={authenticated}
-                                    changeAuthStatus={this.changeAuthStatus}
                                 />
                                 <ProtectedRoute
                                     exact path='/signup'
                                     component={signup}
-                                    authenticated={authenticated}
-                                    changeAuthStatus={this.changeAuthStatus}
                                 />
                             </Switch>
                         </div>

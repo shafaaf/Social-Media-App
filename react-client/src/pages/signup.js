@@ -53,7 +53,7 @@ class Signup extends Component {
             confirmPassword: this.state.confirmPassword,
             handle: this.state.handle
         };
-        this.props.signupUser(newUserData, this.props.history, this.props.changeAuthStatus);
+        this.props.signupUser(newUserData, this.props.history);
     }
 
     handleChange = (e) => {
