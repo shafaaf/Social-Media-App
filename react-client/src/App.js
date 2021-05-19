@@ -13,6 +13,8 @@ import store from "./redux/store";
 
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import {getUserData, logoutUser} from "./redux/actions/userActions";
+import axios from "axios";
 
 const theme = createMuiTheme({
     palette: {
@@ -46,10 +48,10 @@ class App extends Component {
             if (decodedToken.exp * 1000 < Date.now()) { // expired
                 this.setState({
                     authenticated : false
-                }, () => {
-                    // window.location.href = '/login';
                 });
             } else {
+                axios.defaults.headers.common['Authorization'] = token;
+                store.dispatch(getUserData());
                 this.setState({
                     authenticated : true
                 });
@@ -63,6 +65,13 @@ class App extends Component {
         });
     };
 
+    logoutOnClick = () => {
+        store.dispatch(logoutUser());
+        this.setState({
+            authenticated: false
+        });
+    };
+
     render() {
         console.log("authenticated is: ", this.state.authenticated);
         // How do protected routes: https://stackoverflow.com/questions/48497510/simple-conditional-routing-in-reactjs
@@ -71,7 +80,10 @@ class App extends Component {
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
                     <Router>
-                        <Navbar/>
+                        <Navbar
+                            authenticated={authenticated}
+                            logoutOnClick={this.logoutOnClick}
+                        />
                         <div className="container">
                             <Switch>
                                 <Route exact path = '/' component={home}/>

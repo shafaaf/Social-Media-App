@@ -1,4 +1,4 @@
-import {SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_AUTHENTICATED} from "../types";
+import {SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_AUTHENTICATED, SET_UNAUTHENTICATED} from "../types";
 import axios from "axios";
 
 export const loginUser = (userData, history, changeAuthStatus) => (dispatch) => {
@@ -59,6 +59,13 @@ export const signupUser = (newUserData, history, changeAuthStatus) => (dispatch)
         });
 }
 
+export const logoutUser = () => (dispatch) => {
+    removeAuthorizationHeader();
+    dispatch({
+        type: SET_UNAUTHENTICATED,
+    });
+}
+
 export const getUserData = () => (dispatch) => {
     axios.get(`http://localhost:5000/social-media-app-22252/us-central1/api/user`)
         .then(res => {
@@ -73,8 +80,14 @@ export const getUserData = () => (dispatch) => {
         });
 }
 
-const setAuthorizationHeader = (token) => {
+export const setAuthorizationHeader = (token) => {
     const fireBaseAuthToken =  `Bearer ${token}`;
     localStorage.setItem('FireBaseAuthToken', fireBaseAuthToken);
     axios.defaults.headers.common['Authorization'] = fireBaseAuthToken;
+};
+
+
+export const removeAuthorizationHeader = () => {
+    localStorage.removeItem('FireBaseAuthToken');
+    delete axios.defaults.headers.common['Authorization'];
 };
