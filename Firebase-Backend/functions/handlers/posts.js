@@ -1,5 +1,4 @@
 const {isEmpty, sanitizeString} = require("../util/utils");
-
 const {admin} = require("../util/admin");
 
 exports.getAllPosts = (req, res) => {
@@ -9,18 +8,57 @@ exports.getAllPosts = (req, res) => {
         .get()
         .then((data) => {
             const posts = [];
+            const promiseList = [];
             data.forEach((doc) => {
-                console.log(doc.id, " => ", doc.data());
-                posts.push({
-                    postId: doc.id,
-                    body: doc.data().body,
-                    userHandle: doc.data().userHandle,
-                    createdAt: doc.data().createdAt
-                });
+                promiseList.push(
+                    new Promise((resolve, reject) => {
+                        console.log(doc.id, " => ", doc.data());
+                        const userHandle = doc.data().userHandle;
+                        getProfilePicUrl(userHandle)
+                            .then((profilePicUrl) => {
+                                posts.push({
+                                    postId: doc.id,
+                                    body: doc.data().body,
+                                    userHandle: doc.data().userHandle,
+                                    createdAt: doc.data().createdAt,
+                                    profilePicUrl: profilePicUrl
+                                });
+                                resolve();
+                            })
+                            .catch((e) => {
+                                reject(e);
+                            });
+                    })
+                );
             });
-            return res.json(posts);
+            console.log("HERE");
+            console.log("promiseList is: ", promiseList);
+            Promise.all(promiseList)
+                .then(() => {
+                    console.log("posts is: ", posts);
+                    return res.json(posts);
+                });
         })
-        .catch((e) => console.error(e));
+        .catch((e) => {
+            console.error(e);
+            res.status(500).json({error: "error getting all posts"});
+        });
+};
+
+const getProfilePicUrl = (userHandle) => {
+    return new Promise((resolve, reject) => {
+        admin.firestore().doc(`/users/${userHandle}`)
+            .get()
+            .then((userDoc) => {
+                console.log("userDoc.data(): ", userDoc.data());
+                if (userDoc.exists) {
+                    return resolve(userDoc.data().profilePicUrl);
+                } else {
+                    // eslint-disable-next-line prefer-promise-reject-errors
+                    reject("Weird error: No profile pic of user");
+                }
+            });
+    });
 };
 
 exports.getPost = (req, res) => {

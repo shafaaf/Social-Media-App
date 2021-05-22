@@ -13,6 +13,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
+        // TODO: move fetching posts to a redux action
         axios.get(`http://localhost:5000/social-media-app-22252/us-central1/api/posts`)
         .then(res => {
             this.setState({
