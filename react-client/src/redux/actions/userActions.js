@@ -1,4 +1,11 @@
-import {SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_AUTHENTICATED, SET_UNAUTHENTICATED} from "../types";
+import {
+    SET_UI_ERRORS,
+    CLEAR_UI_ERRORS,
+    LOADING_UI,
+    SET_AUTHENTICATED,
+    SET_UNAUTHENTICATED,
+    LOADING_USER
+} from "../types";
 import axios from "axios";
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -7,20 +14,20 @@ export const loginUser = (userData, history) => (dispatch) => {
         .then(res => {
             setAuthorizationHeader(res.data.token);
             dispatch(getUserData());
-            dispatch({type : CLEAR_ERRORS});
+            dispatch({type : CLEAR_UI_ERRORS});
             history.push("/");
         })
         .catch(err => {
             if (err.response) {
                 console.error(err.response.data);
                 dispatch({
-                    type : SET_ERRORS,
+                    type : SET_UI_ERRORS,
                     payload: err.response.data
                 });
             } else {
                 console.error(err);
                 dispatch({
-                    type : SET_ERRORS,
+                    type : SET_UI_ERRORS,
                     payload: {
                         "general" : "Cannot connect due to network issue."
                     }
@@ -35,20 +42,20 @@ export const signupUser = (newUserData, history) => (dispatch) => {
         .then(res => {
             setAuthorizationHeader(res.data.token);
             dispatch(getUserData());
-            dispatch({type : CLEAR_ERRORS});
+            dispatch({type : CLEAR_UI_ERRORS});
             history.push("/");
         })
         .catch(err => {
             if (err.response) {
                 console.error(err.response.data);
                 dispatch({
-                    type : SET_ERRORS,
+                    type : SET_UI_ERRORS,
                     payload: err.response.data
                 });
             } else {
                 console.error(err);
                 dispatch({
-                    type : SET_ERRORS,
+                    type : SET_UI_ERRORS,
                     payload: {
                         "general" : "Cannot connect due to network issue."
                     }
@@ -65,6 +72,7 @@ export const logoutUser = () => (dispatch) => {
 }
 
 export const getUserData = () => (dispatch) => {
+    dispatch({type: LOADING_USER});
     axios.get(`http://localhost:5000/social-media-app-22252/us-central1/api/user`)
         .then(res => {
             dispatch({
@@ -73,8 +81,20 @@ export const getUserData = () => (dispatch) => {
             });
         })
         .catch((err) => {
-            console.error(err);
-            // TODO: Handle error here by dispatching something
+            if (err.response) {
+                console.error(err.response.data);
+                dispatch({
+                    type : SET_UI_ERRORS,
+                    payload: err.response.data
+                });
+            } else {
+                dispatch({
+                    type : SET_UI_ERRORS,
+                    payload: {
+                        "general" : "Cannot connect due to network issue."
+                    }
+                });
+            }
         });
 }
 

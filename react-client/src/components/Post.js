@@ -35,6 +35,7 @@ class Post extends Component {
         return (
             <Card className={classes.card}>
                 <CardMedia className={classes.image}
+                    // TODO: Show real profile image instead of placeholder image
                     image='https://i.stack.imgur.com/l60Hf.png'
                     title="User Profile Image"
                 />
