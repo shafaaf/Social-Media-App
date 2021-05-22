@@ -24,19 +24,21 @@ exports.getAllPosts = (req, res) => {
                                     profilePicUrl: profilePicUrl
                                 });
                                 resolve();
+                                // reject(new Error("ads"));
                             })
                             .catch((e) => {
-                                reject(e);
+                                throw e;
                             });
                     })
                 );
             });
-            console.log("HERE");
-            console.log("promiseList is: ", promiseList);
             Promise.all(promiseList)
                 .then(() => {
-                    console.log("posts is: ", posts);
                     return res.json(posts);
+                })
+                .catch((e) => {
+                    console.error(e);
+                    res.status(500).json({error: "error getting all posts"});
                 });
         })
         .catch((e) => {
