@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import {logoutUser, uploadImage} from "../redux/actions/userActions";
 import store from "../redux/store";
 import EditProfile from "./EditProfile";
+import Grid from "@material-ui/core/Grid";
 
 const styles = {
     root: {
@@ -32,6 +33,9 @@ const styles = {
     link: {
         color: 'inherit',
         textDecoration: 'none'
+    },
+    grid: {
+        textAlign: "center"
     }
 };
 
@@ -128,15 +132,19 @@ class Profile extends Component {
                         </CardContent>
                     </CardActionArea>
                     <CardActions>
-                        <Tooltip title="Logout" placement="left">
-                            <KeyboardReturn
-                                color="primary"
-                                fontSize="small"
-                                onClick={() => {store.dispatch(logoutUser());}}
-                            />
-                        </Tooltip>
-
-                        <EditProfile />
+                        <Grid container className={classes.grid}>
+                            <Grid item xs={6}>
+                                <EditProfile />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Tooltip title="Logout" placement="right">
+                                    <KeyboardReturn
+                                        color="primary"
+                                        onClick={() => {store.dispatch(logoutUser());}}
+                                    />
+                                </Tooltip>
+                            </Grid>
+                        </Grid>
                     </CardActions>
                 </Card>
             );

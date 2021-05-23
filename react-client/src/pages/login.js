@@ -64,45 +64,42 @@ class Login extends Component {
         const {errors, loading} = this.props.ui;
 
         return (
-            <div>
-                <Grid container className={classes.form}>
-                    <Grid item sm />
-                    <Grid item sm>
-                        <img src={TwitterIcon} alt='Twitter Icon' className={classes.image}/>
-                        <Typography variant="h2" className={classes.pageTitle}>Login</Typography>
+            <Grid container className={classes.form}>
+                <Grid item sm />
+                <Grid item sm>
+                    <img src={TwitterIcon} alt='Twitter Icon' className={classes.image}/>
+                    <Typography variant="h2" className={classes.pageTitle}>Login</Typography>
 
-                        <form noValidate onSubmit={this.handleSubmit}>
-                            <TextField id="email" name="email" type="email" label="Email" className={classes.textField}
-                                value={this.state.email} onChange={this.handleChange}
-                                helperText={errors.email} error={errors.email ? true : false} fullWidth/>
-                            <TextField id="password" name="password" type="password" label="Password" className={classes.textField}
-                                value={this.state.password} onChange={this.handleChange}
-                               helperText={errors.password} error={errors.password ? true : false} fullWidth/>
+                    <form noValidate onSubmit={this.handleSubmit}>
+                        <TextField id="email" name="email" type="email" label="Email" className={classes.textField}
+                            value={this.state.email} onChange={this.handleChange}
+                            helperText={errors.email} error={errors.email ? true : false} fullWidth/>
+                        <TextField id="password" name="password" type="password" label="Password" className={classes.textField}
+                            value={this.state.password} onChange={this.handleChange}
+                           helperText={errors.password} error={errors.password ? true : false} fullWidth/>
 
-                            {
-                                errors.general && (
-                                    <Typography variant="body2" className={classes.generalError}>
-                                        {errors.general}
-                                    </Typography>
-                                )
-                            }
+                        {
+                            errors.general && (
+                                <Typography variant="body2" className={classes.generalError}>
+                                    {errors.general}
+                                </Typography>
+                            )
+                        }
 
-                            <Button
-                                type="submit" variant="contained" color="primary"
-                                className={classes.button} disabled={loading}>
-                                {loading === true ? <CircularProgress />: <span>Login</span>}
-                            </Button>
-                            <br/>
-                            <br/>
-                            <small>Dont have an account? Sign up <Link to='/signup'>here</Link></small>
-                        </form>
+                        <Button
+                            type="submit" variant="contained" color="primary"
+                            className={classes.button} disabled={loading}>
+                            {loading === true ? <CircularProgress />: <span>Login</span>}
+                        </Button>
+                        <br/>
+                        <br/>
+                        <small>Dont have an account? Sign up <Link to='/signup'>here</Link></small>
+                    </form>
 
 
-                    </Grid>
-                    <Grid item sm />
                 </Grid>
-
-            </div>
+                <Grid item sm />
+            </Grid>
         );
     }
 }

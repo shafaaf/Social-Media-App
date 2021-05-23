@@ -68,7 +68,7 @@ class EditProfile extends Component {
         const { open } = this.state;
         return (
             <Fragment>
-                <Tooltip title="Edit profile" placement="right" fontSize="small">
+                <Tooltip title="Edit profile" placement="left">
                     <EditIcon color="primary" onClick={this.handleOpen}/>
                 </Tooltip>
 
