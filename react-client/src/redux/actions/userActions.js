@@ -73,14 +73,17 @@ export const logoutUser = () => (dispatch) => {
 
 export const getUserData = () => (dispatch) => {
     dispatch({type: LOADING_USER});
+    console.log("HERE1");
     axios.get(`http://localhost:5000/social-media-app-22252/us-central1/api/user`)
         .then(res => {
+            console.log("HERE2");
             dispatch({
                type: SET_AUTHENTICATED,
                payload: res.data
             });
         })
         .catch((err) => {
+            console.log("err is: ", err);
             if (err.response) {
                 console.error(err.response.data);
                 dispatch({

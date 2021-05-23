@@ -20,6 +20,10 @@ const FirebaseAuth = (req, res, next) => {
                 .where("userUId", "==", req.user.uid).limit(1).get();
         })
         .then((data) => {
+            console.log("data.docs is: ", data.docs);
+            if (data.docs.length === 0) {
+                throw new Error("Token not valid");
+            }
             req.user.handle = data.docs[0].data().handle;
             // req.user.profilePicUrl = data.docs[0].data().profilePicUrl;
             return next();
@@ -34,10 +38,13 @@ const FirebaseAuth = (req, res, next) => {
                 return res.status(403).json({
                     general: "Not a valid auth token"
                 });
+            } else {
+                console.log("err is: ", err);
+                const test = {
+                    general: err.message
+                };
+                return res.status(403).json(test);
             }
-            console.log("HERE: err is: ", err);
-            console.log("HERE2: err is: ", JSON.parse(err));
-            return res.status(403).json(err);
         });
 };
 
