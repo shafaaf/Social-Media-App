@@ -2,9 +2,11 @@
 export const SET_AUTHENTICATED = 'SET_AUTHENTICATED';
 export const SET_UNAUTHENTICATED = 'SET_UNAUTHENTICATED';
 export const LOADING_USER = 'LOADING_USER';
+export const SET_USER_ERRORS = 'SET_USER_ERRORS';
 export const MARK_NOTIFICATIONS_READ = 'MARK_NOTIFICATIONS_READ';
 
 // UI reducer types
+// for validation errors in login and signup
 export const SET_UI_ERRORS = 'SET_UI_ERRORS';
 export const LOADING_UI = 'LOADING_UI';
 export const CLEAR_UI_ERRORS = 'CLEAR_UI_ERRORS';

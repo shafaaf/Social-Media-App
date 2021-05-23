@@ -1,11 +1,12 @@
-import {LOADING_USER, SET_AUTHENTICATED, SET_UNAUTHENTICATED} from "../types";
+import {LOADING_USER, SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_USER_ERRORS} from "../types";
 
 const initialState = {
     authenticated: false,
     loading: false,
     credentials: {},
     likes: [],
-    notifications: []
+    notifications: [],
+    errors: {}
 };
 
 export default function userReducer (state = initialState, action) {
@@ -14,6 +15,7 @@ export default function userReducer (state = initialState, action) {
             return {
                 authenticated: true,
                 loading: false,
+                errors: {},
                 ...action.payload
             }
         case SET_UNAUTHENTICATED:
@@ -22,6 +24,12 @@ export default function userReducer (state = initialState, action) {
             return {
                 ...state,
                 loading: true
+            };
+        case SET_USER_ERRORS:
+            return {
+                ...state,
+                loading: false,
+                errors: action.payload
             };
         default:
             return state;

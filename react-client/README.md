@@ -14,4 +14,7 @@ Run backend:
     - firebase serve
 
 
+TODOs:
 Add proptypes to everything.
+Error tracking problematic as UI error in fetching users will show error on login page
+Have separate error in separate state objects

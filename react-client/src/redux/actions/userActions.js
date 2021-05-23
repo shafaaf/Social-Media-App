@@ -4,7 +4,7 @@ import {
     LOADING_UI,
     SET_AUTHENTICATED,
     SET_UNAUTHENTICATED,
-    LOADING_USER
+    LOADING_USER, SET_USER_ERRORS
 } from "../types";
 import axios from "axios";
 
@@ -83,16 +83,16 @@ export const getUserData = () => (dispatch) => {
             });
         })
         .catch((err) => {
-            console.log("err is: ", err);
+            console.log("HERE3: err is: ", err);
             if (err.response) {
                 console.error(err.response.data);
                 dispatch({
-                    type : SET_UI_ERRORS,
+                    type : SET_USER_ERRORS,
                     payload: err.response.data
                 });
             } else {
                 dispatch({
-                    type : SET_UI_ERRORS,
+                    type : SET_USER_ERRORS,
                     payload: {
                         "general" : "Cannot connect due to network issue."
                     }

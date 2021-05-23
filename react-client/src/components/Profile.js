@@ -57,10 +57,9 @@ class Profile extends Component {
     render() {
         const {classes} = this.props;
         const {user} = this.props;
-        const {ui} = this.props;
 
-        if (Object.keys(ui.errors).length > 0) {
-            const errorList = Object.entries(ui.errors).map(([key, value]) => {
+        if (Object.keys(user.errors).length > 0) {
+            const errorList = Object.entries(user.errors).map(([key, value]) => {
                 return <p>{key} : {value}</p>
             });
             return (

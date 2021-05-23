@@ -11,6 +11,8 @@ import {Link} from "react-router-dom";
 
 import {connect} from "react-redux";
 import {loginUser} from '../redux/actions/userActions';
+import store from "../redux/store";
+import {CLEAR_UI_ERRORS} from "../redux/types";
 
 const styles = {
     form: {
@@ -42,6 +44,12 @@ class Login extends Component {
             email: '',
             password: ''
         };
+    }
+
+    componentDidMount() { // remove previous errors
+        store.dispatch({
+            type : CLEAR_UI_ERRORS
+        });
     }
 
     handleSubmit = (e) => {
