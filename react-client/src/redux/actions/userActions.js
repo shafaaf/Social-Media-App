@@ -109,6 +109,17 @@ export const uploadImage = (formData) => (dispatch) => {
         });
 }
 
+export const editUserData = (userData) => (dispatch) => {
+    dispatch({type: LOADING_USER});
+    axios.post(`http://localhost:5000/social-media-app-22252/us-central1/api/user/`, userData)
+        .then(() => {
+            dispatch(getUserData());
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+}
+
 export const setAuthorizationHeader = (token) => {
     const fireBaseAuthToken =  `Bearer ${token}`;
     localStorage.setItem('FireBaseAuthToken', fireBaseAuthToken);

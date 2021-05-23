@@ -3,19 +3,20 @@ import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from "react-redux";
 import CardContent from "@material-ui/core/CardContent";
-import {Card, CardActionArea, CardActions, CircularProgress, IconButton, Tooltip} from "@material-ui/core";
+import {Card, CardActionArea, CardActions, CircularProgress, Tooltip} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import CardMedia from "@material-ui/core/CardMedia";
 
 import CalendarToday from '@material-ui/icons/CalendarToday';
 import LinkIcon from '@material-ui/icons/Link';
-import EditIcon from '@material-ui/icons/Edit';
 import LocationOn from '@material-ui/icons/LocationOn';
+import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
+import EditIcon from '@material-ui/icons/Edit';
 
 import dayjs from "dayjs";
-import {uploadImage} from "../redux/actions/userActions";
-
-
+import {logoutUser, uploadImage} from "../redux/actions/userActions";
+import store from "../redux/store";
+import EditProfile from "./EditProfile";
 
 const styles = {
     root: {
@@ -84,9 +85,7 @@ class Profile extends Component {
                         <input hidden type="file" id="imageInput" onChange={this.handleImageChange}/>
 
                         <Tooltip title="Change picture" placement="right">
-                            <IconButton onClick={this.handleEditPicture} className="button">
-                                <EditIcon color="primary"/>
-                            </IconButton>
+                            <EditIcon color="primary" onClick={this.handleEditPicture} fontSize="small"/>
                         </Tooltip>
 
                         <CardContent>
@@ -128,6 +127,17 @@ class Profile extends Component {
                             }
                         </CardContent>
                     </CardActionArea>
+                    <CardActions>
+                        <Tooltip title="Logout" placement="left">
+                            <KeyboardReturn
+                                color="primary"
+                                fontSize="small"
+                                onClick={() => {store.dispatch(logoutUser());}}
+                            />
+                        </Tooltip>
+
+                        <EditProfile />
+                    </CardActions>
                 </Card>
             );
         } else {

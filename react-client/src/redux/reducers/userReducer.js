@@ -20,7 +20,7 @@ export default function userReducer (state = initialState, action) {
             return initialState;
         case LOADING_USER:
             return {
-                ...initialState,
+                ...state,
                 loading: true
             };
         default:

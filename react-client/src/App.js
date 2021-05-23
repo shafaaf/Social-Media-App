@@ -52,7 +52,7 @@ class App extends Component {
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
                     <Router>
-                        <Navbar logoutOnClick={this.logoutOnClick}/>
+                        <Navbar/>
                         <div className="container">
                             <Switch>
                                 <Route exact path = '/' component={home}/>
