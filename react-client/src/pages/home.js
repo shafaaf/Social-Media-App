@@ -4,33 +4,25 @@ import axios from "axios";
 import Post from "../components/Post";
 import Profile from "../components/Profile";
 import {CircularProgress} from "@material-ui/core";
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+import {getAllPosts} from "../redux/actions/dataActions";
 
 class Home extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            posts: null
-        }
-    }
 
     componentDidMount() {
-        // TODO: move fetching posts to a redux action
-        axios.get(`http://localhost:5000/social-media-app-22252/us-central1/api/posts`)
-        .then(res => {
-            this.setState({
-                posts: res.data
-            });
-        })
-        .catch(err => console.error(err));
+        this.props.getAllPosts();
     }
 
     showRecentPosts = () => {
-        if (this.state.posts) {
-            return this.state.posts.map((post) => {
+        const { posts, loading } = this.props.data;
+
+        if (loading) {
+            return <CircularProgress />;
+        } else {
+            return posts.map((post) => {
                 return <Post key={post.postId} post={post}/>;
             })
-        } else {
-            return <CircularProgress />;
         }
     }
 
@@ -48,4 +40,19 @@ class Home extends Component {
     }
 }
 
-export default Home;
+const MapStateToProps = (state) => {
+    return {
+        data: state.data
+    };
+};
+
+const MapActionsToProps = {
+    getAllPosts
+};
+
+Home.propTypes = {
+    getAllPosts: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired
+};
+
+export default connect(MapStateToProps, MapActionsToProps)(Home);
