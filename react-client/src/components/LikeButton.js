@@ -6,7 +6,13 @@ import {Link} from "react-router-dom";
 
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import {FavoriteBorder} from "@material-ui/icons";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const styles = {
+    favoriteIconClickable: {
+        cursor: 'pointer'
+    }
+};
 
 class LikeButton extends Component {
     likedPost = () => {
@@ -29,15 +35,24 @@ class LikeButton extends Component {
     };
 
     render() {
+        const {classes} = this.props;
+
         const { authenticated } = this.props.user;
         const likeButton = !authenticated ? (
             <Link to="/login">
                 <FavoriteBorder color="primary" />
             </Link>
         ) : this.likedPost() ? (
-            <FavoriteIcon color="primary" onClick={this.unlikePost}/>
+            <FavoriteIcon
+                color="primary"
+                className={classes.favoriteIconClickable}
+                onClick={this.unlikePost}
+            />
         ) : (
-            <FavoriteBorder color="primary" onClick={this.likePost}/>
+            <FavoriteBorder
+                color="primary"
+                className={classes.favoriteIconClickable}
+                onClick={this.likePost}/>
         );
         return likeButton;
     }
@@ -54,10 +69,11 @@ const mapActionsToProps = {
 };
 
 LikeButton.propTypes = {
+    classes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     likePost: PropTypes.func.isRequired,
     unlikePost: PropTypes.func.isRequired,
     postId: PropTypes.string.isRequired,
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(LikeButton);
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(LikeButton));
