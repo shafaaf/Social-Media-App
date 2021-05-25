@@ -46,6 +46,7 @@ class Post extends Component {
                     <Typography variant="body2" color="textSecondary">{dayjs(post.createdAt).fromNow()}</Typography>
                     <Typography variant="body1">{post.body}</Typography>
                     <LikeButton postId={post.postId}/>
+                    <h2>{post.likeCount} Likes</h2>
                 </CardContent>
             </Card>
         );

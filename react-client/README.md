@@ -15,6 +15,10 @@ Run backend:
 
 
 TODOs:
-Add proptypes to everything.
-Error tracking problematic as UI error in fetching users will show error on login page
-Cant show like count as not getting it in data reducer
+- Add proptypes to everything.
+- Error tracking problematic as UI error in fetching users will show error on login page
+- Cant show like count as not getting it in data reducer
+- When like a post, profile pic of post goes away. This is because when sending a like request, it does not return 
+  the profile image. So add profile image to both like and unlike routes in firebase backend code.
+  
+

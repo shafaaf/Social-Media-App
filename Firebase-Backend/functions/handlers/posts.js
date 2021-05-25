@@ -56,6 +56,7 @@ const getProfilePicUrl = (userHandle) => {
             .then((userDoc) => {
                 console.log("userDoc.data(): ", userDoc.data());
                 if (userDoc.exists) {
+                    console.log("Returning: ", userDoc.data().profilePicUrl);
                     return resolve(userDoc.data().profilePicUrl);
                 } else {
                     // eslint-disable-next-line prefer-promise-reject-errors
@@ -192,6 +193,10 @@ exports.likePost = (req, res) => {
                         });
                     })
                     .then(() => {
+                        return getProfilePicUrl(postData.userHandle);
+                    })
+                    .then((profilePicUrl) => {
+                        postData.profilePicUrl = profilePicUrl;
                         return res.json(postData);
                     });
             } else { // like document by user for this post exists already
@@ -237,7 +242,11 @@ exports.unlikePost = (req, res) => {
                         });
                     })
                     .then(() => {
-                        res.json(postData);
+                        return getProfilePicUrl(postData.userHandle);
+                    })
+                    .then((profilePicUrl) => {
+                        postData.profilePicUrl = profilePicUrl;
+                        return res.json(postData);
                     });
             }
         })
