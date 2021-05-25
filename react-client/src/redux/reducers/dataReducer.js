@@ -1,4 +1,4 @@
-import {LOADING_DATA, SET_DATA_ERRORS, SET_POSTS} from "../types";
+import {LIKE_POST, LOADING_DATA, SET_DATA_ERRORS, SET_POSTS, UNLIKE_POST} from "../types";
 
 const initialState = {
     posts: [],
@@ -21,6 +21,19 @@ export default function dataReducer (state = initialState, action) {
                 loading: false,
                 errors: {}
             };
+        case LIKE_POST:
+        case UNLIKE_POST:
+            let index = state.posts.findIndex(
+                (post) => post.postId === action.payload.postId
+            );
+            state.posts[index] = action.payload;
+            // if (state.post.postId === action.payload.postId) {
+            //     state.post = action.payload;
+            // }
+            return {
+                ...state
+            };
+
         case SET_DATA_ERRORS:
             return {
                 ...state,

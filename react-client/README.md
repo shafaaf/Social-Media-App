@@ -17,4 +17,4 @@ Run backend:
 TODOs:
 Add proptypes to everything.
 Error tracking problematic as UI error in fetching users will show error on login page
-Have separate error in separate state objects
+Cant show like count as not getting it in data reducer

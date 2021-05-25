@@ -8,6 +8,9 @@ import {Link} from "react-router-dom";
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+import LikeButton from "./LikeButton";
 
 
 const styles = {
@@ -42,11 +45,23 @@ class Post extends Component {
                     <Typography variant="h5" color="primary" component={Link} to={`/users/${post.userHandle}`}>{post.userHandle}</Typography>
                     <Typography variant="body2" color="textSecondary">{dayjs(post.createdAt).fromNow()}</Typography>
                     <Typography variant="body1">{post.body}</Typography>
+                    <LikeButton postId={post.postId}/>
                 </CardContent>
-
             </Card>
         );
     }
 }
 
-export default withStyles(styles)(Post);
+const MapStateToProps = (state) => {
+    return {
+        user: state.user
+    };
+};
+
+Post.propTypes = {
+    classes: PropTypes.object.isRequired,
+    post: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+};
+
+export default connect(MapStateToProps)(withStyles(styles)(Post));

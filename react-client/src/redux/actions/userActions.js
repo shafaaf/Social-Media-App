@@ -126,8 +126,7 @@ export const setAuthorizationHeader = (token) => {
     axios.defaults.headers.common['Authorization'] = fireBaseAuthToken;
 };
 
-
-export const removeAuthorizationHeader = () => {
+ export const removeAuthorizationHeader = () => {
     localStorage.removeItem('FireBaseAuthToken');
     delete axios.defaults.headers.common['Authorization'];
 };

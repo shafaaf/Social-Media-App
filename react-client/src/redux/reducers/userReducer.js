@@ -1,4 +1,4 @@
-import {LOADING_USER, SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_USER_ERRORS} from "../types";
+import {LIKE_POST, LOADING_USER, SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_USER_ERRORS, UNLIKE_POST} from "../types";
 
 const initialState = {
     authenticated: false,
@@ -24,6 +24,24 @@ export default function userReducer (state = initialState, action) {
             return {
                 ...state,
                 loading: true
+            };
+        case LIKE_POST:
+            return {
+                ...state,
+                likes: [
+                    ...state.likes,
+                    {
+                        userHandle: state.credentials.handle,
+                        postId: action.payload.postId
+                    }
+                ]
+            };
+        case UNLIKE_POST:
+            return {
+                ...state,
+                likes: state.likes.filter(
+                    (like) => like.postId !== action.payload.postId
+                )
             };
         case SET_USER_ERRORS:
             return {

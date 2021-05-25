@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Grid from "@material-ui/core/Grid";
-import axios from "axios";
 import Post from "../components/Post";
 import Profile from "../components/Profile";
 import {CircularProgress} from "@material-ui/core";
