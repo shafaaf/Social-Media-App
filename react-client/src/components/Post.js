@@ -12,13 +12,6 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import LikeButton from "./LikeButton";
 import ChatIcon from '@material-ui/icons/Chat';
-import Grid from "@material-ui/core/Grid";
-import EditProfile from "./EditProfile";
-import {Tooltip} from "@material-ui/core";
-import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
-import store from "../redux/store";
-import {logoutUser} from "../redux/actions/userActions";
-
 
 const styles = {
     card: {
