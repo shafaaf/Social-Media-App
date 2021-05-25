@@ -11,6 +11,13 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import LikeButton from "./LikeButton";
+import ChatIcon from '@material-ui/icons/Chat';
+import Grid from "@material-ui/core/Grid";
+import EditProfile from "./EditProfile";
+import {Tooltip} from "@material-ui/core";
+import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
+import store from "../redux/store";
+import {logoutUser} from "../redux/actions/userActions";
 
 
 const styles = {
@@ -25,6 +32,15 @@ const styles = {
     content: {
         padding: 25,
         objectFit: 'cover'
+    },
+    grid: {
+        textAlign: "center",
+        margin: "0 auto"
+    },
+    iconWrapper: {
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap'
     }
 };
 
@@ -45,8 +61,18 @@ class Post extends Component {
                     <Typography variant="h5" color="primary" component={Link} to={`/users/${post.userHandle}`}>{post.userHandle}</Typography>
                     <Typography variant="body2" color="textSecondary">{dayjs(post.createdAt).fromNow()}</Typography>
                     <Typography variant="body1">{post.body}</Typography>
-                    <LikeButton postId={post.postId}/>
-                    <h2>{post.likeCount} Likes</h2>
+
+                    <br/>
+                    <div className={classes.iconWrapper}>
+                        <LikeButton postId={post.postId}/>
+                        <span>&nbsp;{post.likeCount} Likes</span>
+                    </div>
+                    <br/>
+                    <div className={classes.iconWrapper}>
+                        <ChatIcon color="primary"/>
+                        <span>&nbsp;{post.commentCount} Comments</span>
+                    </div>
+
                 </CardContent>
             </Card>
         );
